@@ -1,11 +1,12 @@
+const toLocaleString = require('formatResult').toLocaleString;
 const scriptName = "settlement";
 
 const keywords = {
   start: "정산시작",
   finish: "정산종료",
   restart: "정산재개",
-  reset: "정산초기화",
-}
+  reset: "정산초기화"
+};
 const dataByRoom = {};
 
 /**
@@ -22,8 +23,8 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
   if(msg === keywords.start) {
     dataByRoom[room] = {
       inProgress: true,
-      settlementData: {},
-    }
+      settlementData: {}
+    };
     replier.reply("정산을 시작합니다.");
     return;
   }
@@ -79,7 +80,7 @@ function calculateSettlement(room) {
     settlement[name] = {
       spending: spending,
       amountToSettle: perCapita - spending
-    }
+    };
   }
   log(settlement);
   return settlement;
@@ -130,14 +131,14 @@ function sumSpendings(arr) {
 
 function generateSettlementMsg(settlement) {
   var msg = '';
-  msg += ('총금액: ' + settlement.roomTotal + " (인당 " + settlement.perCapita + '원)\n');
+  msg += ('총금액: ' + toLocaleString(settlement.roomTotal) + " (인당 " + toLocaleString(settlement.perCapita) + '원)\n');
   for(var i = 0; i < settlement.names.length; i++) {
     var name = settlement.names[i];
     var person = settlement[name];
     msg += (name + ": ");
-    msg += (person.spending + "원 지출 / ");
+    msg += (toLocaleString(person.spending) + "원 지출 / ");
     var giveReceiveText = person.amountToSettle > 0 ? "주기" : "받기";
-    msg += (Math.abs(person.amountToSettle) + "원 " + giveReceiveText);
+    msg += (toLocaleString(Math.abs(person.amountToSettle)) + "원 " + giveReceiveText);
     msg += "\n";
   }
   return msg;
@@ -160,12 +161,10 @@ function getOrCreate(obj, key, type) {
 }
 
 function parseMsg(msg) {
-  
-
   const amount = parseInt(msg.replace(",", "").replace("원", ""));
   return {
     amount: amount
-  }
+  };
 }
 
 //아래 4개의 메소드는 액티비티 화면을 수정할때 사용됩니다.
