@@ -135,11 +135,10 @@ function generateSettlementMsg(settlement) {
   for(var i = 0; i < settlement.names.length; i++) {
     var name = settlement.names[i];
     var person = settlement[name];
-    msg += (name + ": ");
-    msg += (toLocaleString(person.spending) + "원 지출 / ");
+    msg += (name + ": \n");
+    msg += (toLocaleString(person.spending) + "원 지출\n");
     var giveReceiveText = person.amountToSettle > 0 ? "주기" : "받기";
-    msg += (toLocaleString(Math.abs(person.amountToSettle)) + "원 " + giveReceiveText);
-    msg += "\n";
+    msg += (toLocaleString(Math.abs(person.amountToSettle)) + "원 " + giveReceiveText + "\n");
   }
   return msg;
 }
